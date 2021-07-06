@@ -1,8 +1,10 @@
 package com.adevinta.android.barista.sample;
 
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,10 +13,12 @@ import static com.adevinta.android.barista.sample.ListsActivity.getRecyclerViewT
 public class TextRecyclerViewAdapter extends RecyclerView.Adapter<TextRecyclerViewAdapter.ViewHolder> {
   private final String[] items;
   private final TextView clickedResult;
+  private final TextWatcher textWatcher;
 
-  TextRecyclerViewAdapter(String[] items, TextView clickedResult) {
+  TextRecyclerViewAdapter(String[] items, TextView clickedResult, TextWatcher textWatcher) {
     this.items = items.clone();
     this.clickedResult = clickedResult;
+    this.textWatcher = textWatcher;
   }
 
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -22,7 +26,8 @@ public class TextRecyclerViewAdapter extends RecyclerView.Adapter<TextRecyclerVi
     TextView textView = (TextView) root.findViewById(R.id.textview);
     View yesButton = root.findViewById(R.id.yes);
     View noButton = root.findViewById(R.id.no);
-    return new ViewHolder(root, textView, yesButton, noButton);
+    EditText editText = root.findViewById(R.id.edittext);
+    return new ViewHolder(root, textView, yesButton, noButton, editText, textWatcher);
   }
 
   public void onBindViewHolder(final ViewHolder holder, final int position) {
@@ -55,12 +60,18 @@ public class TextRecyclerViewAdapter extends RecyclerView.Adapter<TextRecyclerVi
     TextView textView;
     View yesButton;
     View noButton;
+    EditText editText;
 
-    ViewHolder(View root, TextView textView, View yesButton, View noButton) {
+    ViewHolder(View root, TextView textView, View yesButton, View noButton, EditText editText, TextWatcher textWatcher) {
       super(root);
       this.textView = textView;
       this.yesButton = yesButton;
       this.noButton = noButton;
+      this.editText = editText;
+
+      // Avoiding adding TextWatcher multiple times
+      this.editText.removeTextChangedListener(textWatcher);
+      this.editText.addTextChangedListener(textWatcher);
     }
   }
 }

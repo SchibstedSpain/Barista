@@ -38,4 +38,10 @@
             android:text="No" />
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
 </LinearLayout>
